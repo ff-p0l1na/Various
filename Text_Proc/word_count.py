@@ -17,7 +17,8 @@ input_file = sys.argv[1]
 with open(input_file, 'r') as file:
     data = file.read()
     list_of_words = word_tokenize(data.lower())  # Convert to lowercase
-    stoplist = set(stopwords.words('english'))
+    stoplist = set(stopwords.words('english')) # Sets automatically remove duplicates and are optimized for membership testing
+    # string.punctuation is a string containing all the punctuation characters defined in the Python standard library string
     stripped_list = [word.strip(string.punctuation) for word in list_of_words if word.strip(string.punctuation) not in stoplist]
 
 # Count occurrences of each word
