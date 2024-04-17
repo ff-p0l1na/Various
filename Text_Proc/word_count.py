@@ -4,6 +4,8 @@ from nltk.tokenize import word_tokenize
 import string
 import pandas as pd
 import sys
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -35,3 +37,12 @@ df = df.sort_values(by='COUNT', ascending=False)
 # Write the DataFrame to a TSV file
 output_file = f"{input_file.split(sep='.')[0]}_word_count.tsv"
 df.to_csv(output_file, sep='\t', index=False)
+
+# Create a word cloud
+wordcloud = WordCloud(width=800, height=400, background_color='white').generate_from_frequencies(words_counted)
+
+# Plot the word cloud
+plt.figure(figsize=(10, 5))
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.show()
