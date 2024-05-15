@@ -1,4 +1,5 @@
 import argparse
+import datetime
 import matplotlib.pyplot as plt
 import nltk
 from nltk.corpus import stopwords
@@ -6,16 +7,15 @@ from nltk.tokenize import word_tokenize
 import pandas as pd
 import requests
 import string
-import sys
 import wget
 from wordcloud import WordCloud
-#####
+
 nltk.download('punkt')
 nltk.download('stopwords')
-#####
+
 data_results = []
-#####
 def FindBooks(language, year_start, year_end):
+
     global data_results
     url = f"https://gutendex.com/books?author_year_start={year_start}&author_year_end={year_end}&languages={language}" # year start and end instead of one variable
 
@@ -30,37 +30,42 @@ def FindBooks(language, year_start, year_end):
             print(f"ID: {item['id']}\tTitle: {item['title']}")
 
         return data_results
+    
     else:
         print("Failed to fetch books. Status code:", response.status_code)
 
 def DownloadBook(id, file_type):
-    url = f'https://www.gutenberg.org/ebooks/{id}.{file_type}' # file type needs to be defined by user
+
+    # url = ??? how to handle url? look at example_urls.txt
     book_file = wget.download(url)
     return book_file
 
 def PlotTheWordCloud():
+
     plt.figure(figsize=(10, 5))
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis('off')
     plt.show()
 
-"""
-remove this and use argparse flags instead
-# Prompt the user for language and year:
-language = input("Enter the language code, e.g. 'en': ")
-year = input("Enter the year: ")
-"""
+
 
 parser = argparse.ArgumentParser(description='Download books from Project Gutenberg')
-parser.add_argument('--language', type=str, required=True, help='Specify a desired language for looked books')
-parser.add_argument('--year_start', type=int, required=True, help='Specify a year for the start range of looked books')
-parser.add_argument('--year_end', type=int, required=True, help='Specify a year for the end range of looked books')
+parser.add_argument('--language', type=str, required=False, help='Specify a desired language for looked books')
+parser.add_argument('--year_start', type=int, required=False, help='Specify a year for the start range of looked books')
+parser.add_argument('--year_end', type=int, required=False, help='Specify a year for the end range of looked books')
 args = parser.parse_args()
 
 language = args.language
+if language is None: # default option when there's no flag
+    language = 'en'
+
 year_start = args.year_start
+if year_start is None: # default option when there's no flag
+    year_start = datetime.date.today().year
+
 year_end = args.year_end
-file_type = args.file_type
+if year_end is None: # default option when there's no flag
+    year_end = datetime.date.today().year
 
 # Find all the matching books:
 FindBooks(language, year_start, year_end)
@@ -68,10 +73,6 @@ FindBooks(language, year_start, year_end)
 # Download the chosen book:
 chosen_id = input("Enter chosen book's ID to download it: ")
 book_file = DownloadBook(chosen_id, file_type)
-
-"""
-How to handle choosing a file format? look up example.json
-"""
 
 # Tokenize the text and remove punctuation and stop words
 with open(book_file, 'r') as file:
@@ -107,3 +108,4 @@ wordcloud = WordCloud(width=800, height=400, background_color='white').generate_
 #####
 
 PlotTheWordCloud()
+quit()

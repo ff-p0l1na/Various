@@ -1,0 +1,10 @@
+'formats': {
+    'text/plain; charset=us-ascii': 'https://www.gutenberg.org/ebooks/51047.txt.utf-8', 
+    'text/html': 'https://www.gutenberg.org/ebooks/51047.html.images', 
+    'text/html; charset=us-ascii': 'https://www.gutenberg.org/files/51047/51047-h/51047-h.htm', 
+    'application/epub+zip': 'https://www.gutenberg.org/ebooks/51047.epub3.images', 
+    'application/x-mobipocket-ebook': 'https://www.gutenberg.org/ebooks/51047.kf8.images', 
+    'application/rdf+xml': 'https://www.gutenberg.org/ebooks/51047.rdf', 
+    'image/jpeg': 'https://www.gutenberg.org/cache/epub/51047/pg51047.cover.medium.jpg', 
+    'application/octet-stream': 'https://www.gutenberg.org/cache/epub/51047/pg51047-h.zip'
+}
