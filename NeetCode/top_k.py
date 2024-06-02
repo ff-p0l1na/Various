@@ -2,43 +2,34 @@
 # return the k most frequent elements. 
 # You may return the answer in any order.
 
-nums = [7,7]
-k = 1
+nums=[1,2]
+k=2
 
-def topkFrequency(nums, k):
+def topKFrequent(nums, k):
 
-    # create a dict with the frequency of each element (key) being the value:
-    frequency = {}
-
-    for i in nums:
-        if i not in frequency:
-            frequency[i] = 1
+    frequencies = {}
+    
+    for item in nums:
+        if item not in frequencies:
+            frequencies[item] = 1
         else:
-            frequency[i] += 1
+            frequencies[item] += 1
 
-    print(frequency)
+        # frequencies={1: 1, 2: 1}
 
-    # create a list of frequencies:
-    frequency_list = []
-    for v in frequency.values():
-        if v not in frequency_list:
-            frequency_list.append(v)
+    # dict where the count is the key and the value is the list of numbers
+    # reversed_frequencies = {1: [1, 2]}    
 
-    print(frequency_list)
+    reversed_frequencies = {}
 
-    # sort the frequencies in the descending order:
-    frequency_list = sorted(frequency_list, reverse=True)
+    for k, v in frequencies.items():
+        if v not in reversed_frequencies:
+            reversed_frequencies[v] = [k]
+        else:
+            reversed_frequencies[v].append(k)
 
-    print(frequency_list)
 
-    # find the k first elements of the sorted list (aka k most frequent):
-    k_most_frequent = []
-    for x in range(k):
-        value_I_want = frequency_list[x]
-        for key, value in frequency.items():
-            if value == value_I_want:
-                k_most_frequent.append(key)
-    print(k_most_frequent)
-    return k_most_frequent
 
-topkFrequency(nums,k)
+
+
+print(topKFrequent(nums, k))
