@@ -1,0 +1,72 @@
+user sees the main menu and can choose an option:
+create
+manage
+quit
+
+if 'create' is chosen:
+    the user sees the 'create' menu and can choose an option:
+    student
+    teacher
+    supervisor
+    quit
+
+    if 'student' is chosen option:
+        user is prompted for and types in the name, surname, name of the group
+        the student is created with name, surnane and the group assigned
+        
+    if 'teacher' is chosen option:
+        user is prompted for andtypes in the name, surname, teached subject, teached groups
+        the teacher is created with name, surname, teached subject and teached groups
+
+    if 'supervisor' is chosen option:
+        user is prompted for and types in the name, surname, name of the supervised class
+        the supervisor is created with name, surname and name of the supervised class
+
+    if 'quit' is chosen option:
+        return to the main menu
+        
+if 'manage' is chosen:
+    the user sees the 'manage' menu and can choose an option:
+    group
+    student
+    teacher
+    supervisor
+    quit
+
+    if 'group' is chosen option:
+
+        the program displays available groups
+        the program asks user for the specific group they want to manage
+        the group is chosen
+        the program displays all students in the group
+        the program displays the supervisor of the group
+
+    if 'student' is chosen option:
+        the user is prompted to type in the name and surname of the student
+        the user can also see the list of all the students in the program (default option when no input)
+            the program displays available students
+
+        when the name of the student is typed in:
+            the program displays all the classes (subjects) that the student is in
+            the program displays all the teachers that own the classes (subjects)
+
+    if 'teacher' is chosen option:
+        the user is prompted to type in the name and surname of the teacher
+        the user can also see the list of all the teachers in the program (default option when no input)
+        when the name of the teacher is typed in:
+        the program displays all the groups that the teacher has classes with
+
+    if 'supervisor' is chosen option:
+        the user is prompted to type in the name and surname of the SV
+        the user can also see the list of all the SV in the program (default option when no input)
+       when the name of the SV is typed in:
+            the program displays all the groups and students that the SV supervises
+
+    if quit:
+        return to main menu
+
+if 'quit' is chosen:
+    the program says 'bye bye' and quits.
+
+if the input is wrong:
+    the program shows error message and prompts for the correct input
