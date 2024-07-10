@@ -4,22 +4,21 @@
 # It's operated by the terminal and takes the input from the user.
 
 import json
-
-with open ("school.json", "r") as database_file:
-    school = json.load(database_file)
-
 class School:
     def __init__(self):
         self.groups = {}
         self.teachers = {}
         self.students = {}
         self.supervisors = {}
-class Group:
-    def __init__(self, name):
-        self.name = name
-        self.students = []
-        self.teachers = []
-        self.supervisor = None
+    
+    def addNewGroup(self, group):
+        if group not in self.groups.keys():
+            self.groups[group] = group
+    
+    def addNewStudent(self, student):
+        if student not in self.students.keys():
+            self.students[student.name + " " + student.surname] = student
+
 class Student:
     def __init__(self, name, surname, group):
         self.name = name
@@ -30,9 +29,10 @@ class Student:
     def createStudent():
         name = input("Please type in student's first name: \n")
         surname = input("Please type in student's last name: \n")
-        group_name = input("Please type in student's group: \n")
-        student = Student(name=name, surname=surname, group=group_name)
+        group = input("Please type in student's group: \n")
+        school.addNewGroup(group)
 
+        student = Student(name=name, surname=surname, group=group)
         return student
 
 class Teacher:
@@ -48,8 +48,8 @@ class Teacher:
         subject = input("Please type in teacher's subject: \n")
         groups = []
         while True:
-            groups = input("Please type in teacher's groups. Press enter to finish: \n")
-            if groups == "":
+            group = input("Please type in teacher's groups. Press enter to finish: \n")
+            if group == "":
                 break
             groups.append(group)
         teacher = Teacher(name=name, surname=surname, subject=subject, groups=groups)
@@ -75,14 +75,23 @@ main_menu = ("Create [C]", "Display [D]", "Quit [Q]")
 create_menu = ("Student [S]", "Teacher [T]", "Supervisor [SV]", "Back [B]")
 display_menu = ("Group [G]", "Student [S]", "Teacher [T]", "Supervisor [SV]", "Quit [Q]")
 
-while True:
 
+# Load school data from JSON file (if it exists)
+try:
+    with open("school.json", "r") as database_file:
+        school_data = json.load(database_file)
+        school = School()
+        school.__dict__.update(school_data)
+except FileNotFoundError:
+    school = School()
+
+while True:
     print(*main_menu, sep="\n")
     option = input("Please choose an option: \n")
 
     if option == "Q" or option == "q":
         with open ("school.json", "w") as database_file:
-            json.dump(school, database_file)
+            json.dump(school.__dict__, database_file)
             quit("Thanks, see you later.")
 
     elif option == "C" or option == "c":
@@ -95,6 +104,7 @@ while True:
         elif option == "S" or option == "s":
             print("You're in the student creation mode.\n")
             student = Student.createStudent()
+            school.addNewStudent(student)
 
         elif option == "T" or option == "t":
             print("You're in the teacher creation mode.\n")
@@ -122,7 +132,7 @@ while True:
 
         elif option == "Q" or option == "q":
             quit("Thanks, see you later.")
-    
+
     elif option == "E" or option == "e":
         pass #TODO
 
