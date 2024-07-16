@@ -10,31 +10,29 @@ class Cake:
         self.top_layer_flavor = top_layer_flavor
         self.toppings = toppings
 
-    @classmethod
-    def generate_a_cake(cls):
 
-        base_layer_types = ["Spongecake", "Choux pastry", "Cupcake", "Yeast cake", "Shortbread"]
-        base_layer_flavors = ["Vanilla", "Cocoa", "Coffee"]
-        middle_layer_types = ["Cold cheesecake", "Cheesecake", "Pudding", "Fruit pudding", "Whipped cream", "Jellied fruits"]
-        middle_layer_flavors = ["Vanilla", "Strawberry", "Coconut", "Chocolate", "Coffee"]
-        top_layer_types = ["Jello", "Icing"]
-        top_layer_flavors = ["Fruit", "Chocolate", "Caramel"]
-        toppings = ["Fresh fruits", "Sprinkles", "Chocolate chips", "Crumble"]
+def generate_a_cake():
 
-        base_layer_type = random.choice(base_layer_types)
-        base_layer_flavor = random.choice(base_layer_flavors)
-        middle_layer_type = random.choice(middle_layer_types)
-        middle_layer_flavor = random.choice(middle_layer_flavors)
-        top_layer_type = random.choice(top_layer_types)
-        top_layer_flavor = random.choice(top_layer_flavors)
-        toppings = random.choice(toppings)
+    base_layer_types = ["Spongecake", "Choux pastry", "Cupcake", "Yeast cake", "Shortbread"]
+    base_layer_flavors = ["Vanilla", "Cocoa", "Coffee"]
+    middle_layer_types = ["Cold cheesecake", "Cheesecake", "Pudding", "Fruit pudding", "Whipped cream", "Jellied fruits"]
+    middle_layer_flavors = ["Vanilla", "Strawberry", "Coconut", "Chocolate", "Coffee"]
+    top_layer_types = ["Jello", "Icing"]
+    top_layer_flavors = ["Fruit", "Chocolate", "Caramel"]
+    topping_types = ["Fresh fruits", "Sprinkles", "Chocolate chips", "Crumble"]
 
-        
-        return cls(base_layer_type, base_layer_flavor, middle_layer_type, middle_layer_flavor, top_layer_type, top_layer_flavor, toppings)
+    base_layer_type = random.choice(base_layer_types)
+    base_layer_flavor = random.choice(base_layer_flavors)
+    middle_layer_type = random.choice(middle_layer_types)
+    middle_layer_flavor = random.choice(middle_layer_flavors)
+    top_layer_type = random.choice(top_layer_types)
+    top_layer_flavor = random.choice(top_layer_flavors)
+    topping = random.choice(topping_types)
+    cake = Cake(base_layer_type, base_layer_flavor, middle_layer_type, middle_layer_flavor, top_layer_type, top_layer_flavor, topping)
 
+    return cake
 
-cake = Cake.generate_a_cake()
-
+cake = generate_a_cake()
 print(f"""Here is your cake:
 
 Base layer: {cake.base_layer_type}
