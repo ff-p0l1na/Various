@@ -15,7 +15,7 @@ class School:
             "supervisor": None,
             "teachers": []
         }
-        return empty_group
+        self.groups[name] = empty_group
     
     def to_dict(self):
         return {"groups": self.groups}
@@ -29,13 +29,11 @@ class Student:
         self.group = group
         self.teachers = []
 
-    def createStudent():
-        name = input("Please enter student's first name: \n")
-        surname = input("Please enter student's last name: \n")
-        group = input("Please enter student's group: \n")
-        student = Student(name=name, surname=surname, group=group)        
-        return student
-    
+    def create(self):
+        self.name = input("Please enter student's first name: \n")
+        self.surname = input("Please enter student's last name: \n")
+        self.group = input("Please enter student's group: \n")
+
     def to_dict(self):
         return {
             "name": self.name,
@@ -43,10 +41,11 @@ class Student:
             "group": self.group,
             "teachers": self.teachers
         }
-    def from_dict(data):
-        student = Student(data["name"], data["surname"], data["group"])
-        student.teachers = data["teachers"]
-        return student
+    def from_dict(self, data):
+        self.name = data["name"]
+        self.surname = data["surname"]
+        self.group = data["group"]
+        self.teachers = data["teachers"]
 
 class Teacher:
     def __init__(self, name, surname, subject, groups):
@@ -55,18 +54,16 @@ class Teacher:
         self.subject = subject
         self.groups = groups
 
-    def createTeacher():
-        name = input("Please enter teacher's first name: \n")
-        surname = input("Please enter teacher's last name: \n")
-        subject = input("Please enter teacher's subject: \n")
-        groups = []
+    def create(self):
+        self.name = input("Please enter teacher's first name: \n")
+        self.surname = input("Please enter teacher's last name: \n")
+        self.subject = input("Please enter teacher's subject: \n")
+        self.groups = []
         while True:
             group = input("Please enter teacher's groups. Press enter to finish: \n")
             if group == "":
                 break
-            groups.append(group)
-        teacher = Teacher(name=name, surname=surname, subject=subject, groups=groups)
-        return teacher
+            self.groups.append(group)
     
     def to_dict(self):
         return {
@@ -76,9 +73,11 @@ class Teacher:
             "groups": self.groups
         }
     
-    def from_dict(data):
-        teacher = Teacher(data["name"], data["surname"], data["subject"], data["groups"])
-        return teacher
+    def from_dict(self, data):
+        self.name = data["name"]
+        self.surname = data["surname"]
+        self.subject = data["subject"]
+        self.groups = data["groups"]
 
 class Supervisor:
     def __init__(self, name, surname, group):
@@ -86,12 +85,10 @@ class Supervisor:
         self.surname = surname
         self.group = group
 
-    def createSupervisor():
-        name = input("Please enter supervisor's first name: \n")
-        surname = input("Please enter supervisor's last name: \n")
-        group = input("Please enter supervisor's group: \n")
-        supervisor = Supervisor(name=name, surname=surname, group=group)
-        return supervisor
+    def create(self):
+        self.name = input("Please enter supervisor's first name: \n")
+        self.surname = input("Please enter supervisor's last name: \n")
+        self.group = input("Please enter supervisor's group: \n")
 
     def to_dict(self):
         return {
@@ -100,9 +97,11 @@ class Supervisor:
             "group": self.group
         }
 
-    def from_dict(data):
-        supervisor = Supervisor(data["name"], data["surname"], data["group"])
-        return supervisor
+    def from_dict(self, data):
+        self.name = data["name"]
+        self.surname = data["surname"]
+        self.group = data["group"]
+
 
 main_menu = ("Create [c]", "Display [d]", "Quit [q]")
 def printSubMenu(option):
@@ -132,69 +131,89 @@ while True:
 
     if option == "q":
         with open ("school.json", "w") as database_file:
-            json.dump(school.groups, database_file)
+            json.dump(school.to_dict(), database_file)
             quit("Thanks, see you later.")
 
     elif option == "c":
         printSubMenu(option)
-        option = input("Please choose what you want to create: \n")
+        option = input("Please choose what you want to create: \n").lower()
         if option == "b":
             continue
 
         elif option == "s":
             print("You're in the student creation mode.\n")
-            student = Student.createStudent()
+            student = Student("", "", "")
+            student.create()
 
             student_group = student.group
-            school.createEmptyGroup(student_group)
-            if student_group not in school.groups.keys():
-                empty_group = school.createEmptyGroup(student_group)
-                school.groups[student_group] = empty_group
-                school.groups[student_group]["name"] = student_group
-                school.groups[student_group]["students"].append(student)
-            else:
-                school.groups[student_group]["students"].append(student)
+            if student_group not in school.groups:
+                school.createEmptyGroup(student_group)
+            school.groups[student_group]["students"].append(student.to_dict())
 
             print(f"{student.name} {student.surname} has been added to {student.group}.\n")
 
         elif option == "t":
             print("You're in the teacher creation mode.\n")
-            teacher = Teacher.createTeacher()
-            
+            teacher = Teacher("", "", "", [])
+            teacher.create()
+
+            for group in teacher.groups:
+                if group not in school.groups:
+                    school.createEmptyGroup(group)
+                school.groups[group]["teachers"].append(teacher.to_dict())
+
+            print(f"{teacher.name} {teacher.surname} has been added.\n")
+
         elif option == "v":
             print("You're in the supervisor creation mode.\n")
-            supervisor = Supervisor.createSupervisor()
+            supervisor = Supervisor("", "", "")
+            supervisor.create()
 
-            supervisor_group = str(supervisor.group)
-            school.createGroup(supervisor_group)
-            if supervisor_group not in school.groups.keys():
-                school.groups[supervisor_group]["name"] = supervisor_group
-                school.groups[supervisor_group]["supervisor"] = supervisor
-            else:
-                school.groups[supervisor_group]["supervisor"] = supervisor
+            supervisor_group = supervisor.group
+            if supervisor_group not in school.groups:
+                school.createEmptyGroup(supervisor_group)
+            school.groups[supervisor_group]["supervisor"] = supervisor.to_dict()
+
+            print(f"{supervisor.name} {supervisor.surname} has been added as supervisor of {supervisor.group}.\n")
 
     elif option == "d":
         printSubMenu(option)
-        option = input("Please choose what you want to display: \n")
+        option = input("Please choose what you want to display: \n").lower()
 
         if option == "g":
             print("You're in the group display mode.\n")
-            
+            for group_name, group in school.groups.items():
+                print(f"Group: {group_name}")
+                print(f"  Students: {[student['name'] + ' ' + student['surname'] for student in group['students']]}")
+                if group["supervisor"]:
+                    print(f"  Supervisor: {group['supervisor']['name']} {group['supervisor']['surname']}")
+                print(f"  Teachers: {[teacher['name'] + ' ' + teacher['surname'] for teacher in group['teachers']]}")
+
         elif option == "s":
             print("You're in the student display mode.\n")
-            
+            for group in school.groups.values():
+                for student in group["students"]:
+                    print(f"{student['name']} {student['surname']} (Group: {student['group']})")
+
         elif option == "t":
             print("You're in the teacher display mode.\n")
-
+            for group in school.groups.values():
+                for teacher in group["teachers"]:
+                    print(f"{teacher['name']} {teacher['surname']} (Group: {teacher['group']})")
+    
         elif option == "v":
             print("You're in the supervisor display mode.\n")
+            for group in school.groups.values():
+                if group["supervisor"]:
+                    print(f"{group['supervisor']['name']} {group['supervisor']['surname']} (Group: {group['supervisor']['group']})")
+            
+        elif option == "b":
+            continue
 
-        elif option == "Q" or option == "q":
-            quit("Thanks, see you later.")
-
-    elif option == "E" or option == "e":
+    elif option == "e":
         printSubMenu(option)
-        pass #TODO
-
+        option = input("Please choose what you want to edit: \n").lower()
+        # TODO add edit menu
+    
     else:
         print("Invalid option. Please try again.\n")
