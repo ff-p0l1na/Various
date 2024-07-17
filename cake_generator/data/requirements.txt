@@ -1,0 +1,6 @@
+beautifulsoup4==4.12.3
+emoji==2.12.1
+google==3.0.0
+progressbar==2.5
+soupsieve==2.5
+typing_extensions==4.12.2
