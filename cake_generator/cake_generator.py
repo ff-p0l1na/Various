@@ -27,22 +27,20 @@ class Cake:
             "topping": self.topping
         }
 
-    def from_dict(self, data):
-        self.base_layer_type = data["base_layer_type"]
-        self.base_layer_flavor = data["base_layer_flavor"]
-        self.middle_layer_type = data["middle_layer_type"]
-        self.middle_layer_flavor = data["middle_layer_flavor"]
-        self.top_layer_type = data["top_layer_type"]
-        self.top_layer_flavor = data["top_layer_flavor"]
-        self.topping = data["topping"]
-
-
-#####
-
+    @staticmethod
+    def from_dict(data):
+        return Cake(
+            data["base_layer_type"],
+            data["base_layer_flavor"],
+            data["middle_layer_type"],
+            data["middle_layer_flavor"],
+            data["top_layer_type"],
+            data["top_layer_flavor"],
+            data["topping"]
+        )
 
 # Show the dummy loading info
 def animated_marker():
-        
     widgets = ['Loading: ', progressbar.AnimatedMarker()]
     bar = progressbar.ProgressBar(widgets=widgets).start()
         
@@ -75,32 +73,30 @@ def generate_a_cake():
 
 # Print a nicely formatted cake idea
 def describe_a_cake(cake):
-
-    print(f"""Here is your cake:
+    print(f"""\n
+    Here's your cake:
 
     Base layer: {cake.base_layer_type} with the {cake.base_layer_flavor.lower()} flavor.
     Middle layer: {cake.middle_layer_type} with the {cake.middle_layer_flavor.lower()} flavor.
     Top layer: {cake.top_layer_type} with the {cake.top_layer_flavor.lower()} flavor.
     Finally, add {cake.topping.lower()} on the top of your cake.
+    \n
     """)
 
 # Print the main menu
 def print_main_menu():
-
     main_options = ["[G]enerate a new cake", "[B]rowse previously generated cakes", "[A]dd new cake components", "[Q]uit"]
-    
-    print("Welcome to the \"Cake Generator\"! What would you like to do?\n")
+    print("\nWelcome to the \"Cake Generator\"! What would you like to do?\n")
     print(*main_options, sep="\n")
 
-# try:
-#     with open("data/historic_cakes.json", "r") as database:
-#         previous_cakes = json.load(database)
-# except FileNotFoundError:
-#     previous_cakes = []
+def save_cake(cake):
+    with open("data/historic_cakes.json", "a") as database:
+        json.dump(cake.to_dict(), database)
+        database.write("\n")
 
 shortcake_emoji = "\U0001F370"
-while True:
 
+while True:
     print_main_menu()
     option = input("Please enter your choice: \n").lower()
     if not option:
@@ -111,6 +107,7 @@ while True:
         animated_marker()
         cake = generate_a_cake()
         describe_a_cake(cake)
+        save_cake(cake)
         print("""Do you need to look for a recipe for a component of the cake?\n
               [Y]es/[N]o\n""")
         answer = input().lower()
